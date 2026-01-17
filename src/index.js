@@ -37,13 +37,53 @@ app.get('/items/:id', (req, res) => {
 // TODO: add PUT route for items
 // TODO: add DELETE route for items
 
-// Add new item
+// Add new item with id
+
 app.post('/items', (req, res) => {
-  //console.log('add item request body', req.body);
-  // TODO: lisää id listaan lisättävälle objektille
-  items.push(req.body);
-  res.status(201).json({message: 'new item added'});
+  const newItem = {
+    id: items.length + 1,
+    name: req.body.name,
+  };
+
+  items.push(newItem);
+  console.log('ADDED ITEM:', newItem);
+  res.status(201).json(newItem);
+
 });
+
+
+// TODO: add PUT route for items
+app.put('/items/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const item = items.find(i => i.id === id);
+
+  if (!item) {
+    return res.status(404).json({message: 'item not found'});
+  }
+
+  // päivitä vain name (dummy)
+  item.name = req.body.name ?? item.name;
+
+  res.json(item);
+});
+
+
+
+// TODO: add DELETE route for items
+
+app.delete('/items/:id', (req, res) => {
+  const id = Number(req.params.id);
+  const index = items.findIndex(i => i.id === id);
+
+  if (index === -1) {
+    return res.status(404).json({message: 'item not found'});
+  }
+
+  items.splice(index, 1);
+  res.sendStatus(204);
+});
+
+
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
