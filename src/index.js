@@ -1,89 +1,38 @@
 import express from 'express';
+import {
+  deleteItemById,
+  getItemById,
+  getItems,
+  postNewItem,
+  putItemById,
+} from './items.js';
+
+import entryRouter from './entry-router.js';
+import userRouter from './user-router.js';
+
 const hostname = '127.0.0.1';
 const app = express();
 const port = 3000;
 
-// Dummy mock data (nollautuu aina, kun sovelluksen käynnistää uudelleen)
-const items = [
-  {id: 1, name: 'Omena'},
-  {id: 2, name: 'Appelsiini'},
-  {id: 3, name: 'Banaaneja'},
-];
-
-// parsitaan json data pyynnöstä ja lisätään request-objektiin
 app.use(express.json());
+app.use('/', express.static('public'));
 
-// API root
-app.get('/', (req, res) => {
-  res.send('This is dummy items API!');
+app.get('/api', (req, res) => {
+  res.send('Health diary API');
 });
 
-// Get all items
-app.get('/items', (req, res) => {
-  res.json(items);
-});
+// ITEMS
+app.get('/api/items', getItems);
+app.get('/api/items/:id', getItemById);
+app.put('/api/items/:id', putItemById);
+app.delete('/api/items/:id', deleteItemById);
+app.post('/api/items', postNewItem);
 
-// Get item based on id
-app.get('/items/:id', (req, res) => {
-  console.log('getting item id:', req.params.id);
-  const itemFound = items.find(item => item.id == req.params.id);
-  if (itemFound) {
-    res.json(itemFound);
-  } else {
-    res.status(404).json({message: 'item not found'});
-  }
-});
+// ENTRIES
+app.use('/api/entries', entryRouter);
 
-// TODO: add PUT route for items
-// TODO: add DELETE route for items
-
-// Add new item with id
-
-app.post('/items', (req, res) => {
-  const newItem = {
-    id: items.length + 1,
-    name: req.body.name,
-  };
-
-  items.push(newItem);
-  console.log('ADDED ITEM:', newItem);
-  res.status(201).json(newItem);
-
-});
-
-
-// TODO: add PUT route for items
-app.put('/items/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const item = items.find(i => i.id === id);
-
-  if (!item) {
-    return res.status(404).json({message: 'item not found'});
-  }
-
-  // päivitä vain name (dummy)
-  item.name = req.body.name ?? item.name;
-
-  res.json(item);
-});
-
-
-
-// TODO: add DELETE route for items
-
-app.delete('/items/:id', (req, res) => {
-  const id = Number(req.params.id);
-  const index = items.findIndex(i => i.id === id);
-
-  if (index === -1) {
-    return res.status(404).json({message: 'item not found'});
-  }
-
-  items.splice(index, 1);
-  res.sendStatus(204);
-});
-
-
+// USERS
+app.use('/api/users', userRouter);
 
 app.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
