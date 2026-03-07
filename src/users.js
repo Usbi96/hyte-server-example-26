@@ -1,4 +1,3 @@
-// 🔹 SINUN LISÄYS ALKAA TÄSTÄ
 
 const users = [
   {id: 1, username: 'ulla', password: '1234'},

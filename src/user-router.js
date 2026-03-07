@@ -5,16 +5,19 @@ import {
   createUser,
   updateUser,
   removeUser,
-  loginUser,
 } from './user-controller.js';
+
+import {authenticateToken} from './middlewares/authentication.js';
 
 const router = express.Router();
 
 router.get('/', listUsers);
 router.post('/', createUser);
-router.post('/login', loginUser);
+
 router.get('/:id', getUser);
-router.put('/:id', updateUser);
-router.delete('/:id', removeUser);
+
+// protected routes
+router.put('/:id', authenticateToken, updateUser);
+router.delete('/:id', authenticateToken, removeUser);
 
 export default router;

@@ -15,16 +15,16 @@ export const getUserById = async (id) => {
 
 export const postUser = async (user) => {
   const [result] = await pool.query(
-    'INSERT INTO users (username, password) VALUES (?, ?)',
-    [user.username, user.password]
+    'INSERT INTO users (username, password, email) VALUES (?, ?, ?)',
+    [user.username, user.password, user.email]
   );
   return result;
 };
 
 export const putUserById = async (id, user) => {
   const [result] = await pool.query(
-    'UPDATE users SET username = ?, password = ? WHERE user_id = ?',
-    [user.username, user.password, id]
+    'UPDATE users SET username = ?, password = ?, email = ? WHERE user_id = ?',
+    [user.username, user.password, user.email, id]
   );
   return result;
 };
