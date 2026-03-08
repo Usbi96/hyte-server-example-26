@@ -1,48 +1,61 @@
-// 🔹 SINUN LISÄYS ALKAA TÄSTÄ
-
 const items = [
-  {id: 1, name: 'Omena'},
-  {id: 2, name: 'Appelsiini'},
-  {id: 3, name: 'Banaaneja'},
+  {id: 1, name: 'Apple', weight: 120},
+  {id: 2, name: 'Banana', weight: 110},
+  {id: 3, name: 'Orange', weight: 130},
 ];
 
-export function getItems(req, res) {
+export const getItems = (req, res) => {
   res.json(items);
-}
+};
 
-export function getItemById(req, res) {
-  const item = items.find(i => i.id == req.params.id);
+export const getItemById = (req, res) => {
+  const item = items.find((item) => item.id === Number(req.params.id));
+
   if (!item) {
     return res.status(404).json({message: 'item not found'});
   }
-  res.json(item);
-}
 
-export function postNewItem(req, res) {
+  res.json(item);
+};
+
+export const postNewItem = (req, res) => {
   const newItem = {
-    id: items.length + 1,
+    id: items.length ? items[items.length - 1].id + 1 : 1,
     name: req.body.name,
+    weight: req.body.weight,
   };
-  items.push(newItem);
-  res.status(201).json(newItem);
-}
 
-export function putItemById(req, res) {
-  const item = items.find(i => i.id == req.params.id);
+  items.push(newItem);
+
+  res.status(201).json({
+    message: 'item created',
+    item: newItem,
+  });
+};
+
+export const putItemById = (req, res) => {
+  const item = items.find((item) => item.id === Number(req.params.id));
+
   if (!item) {
     return res.status(404).json({message: 'item not found'});
   }
-  item.name = req.body.name ?? item.name;
-  res.json(item);
-}
 
-export function deleteItemById(req, res) {
-  const index = items.findIndex(i => i.id == req.params.id);
+  item.name = req.body.name ?? item.name;
+  item.weight = req.body.weight ?? item.weight;
+
+  res.json({
+    message: 'item updated',
+    item,
+  });
+};
+
+export const deleteItemById = (req, res) => {
+  const index = items.findIndex((item) => item.id === Number(req.params.id));
+
   if (index === -1) {
     return res.status(404).json({message: 'item not found'});
   }
+
   items.splice(index, 1);
   res.sendStatus(204);
-}
-
-// 🔹 SINUN LISÄYS PÄÄTTYY TÄHÄN
+};
