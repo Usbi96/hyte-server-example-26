@@ -1,3 +1,41 @@
+## Database Structure
+
+The application uses a MySQL database called **health_diary**.
+
+### Tables
+
+#### Users
+
+Stores registered users of the application.
+
+| Column | Type | Description |
+|------|------|-------------|
+| user_id | INT | Primary key |
+| username | VARCHAR | Username of the user |
+| email | VARCHAR | User email |
+| password | VARCHAR | Hashed password |
+| user_level_id | INT | User role |
+
+#### DiaryEntries
+
+Stores health diary entries created by users.
+
+| Column | Type | Description |
+|------|------|-------------|
+| entry_id | INT | Primary key |
+| user_id | INT | Reference to Users table |
+| entry_date | DATE | Date of the entry |
+| mood | VARCHAR | User mood |
+| weight | DECIMAL | User weight |
+| sleep_hours | INT | Sleep duration |
+| notes | TEXT | Optional notes |
+
+### Relationships
+
+- Each **DiaryEntry** belongs to a **User**
+- Relationship:
+
+
 ## Authentication
 
 The API uses JWT for authentication.
