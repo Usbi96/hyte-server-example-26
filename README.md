@@ -1,96 +1,65 @@
-## Database Structure
+# Health Diary Backend
 
-The application uses a MySQL database called **health_diary**.
+This is the backend API for the Health Diary application.
 
-### Tables
+The backend is built with **Node.js, Express and MySQL** and provides REST API endpoints for authentication, diary entries and training sessions.
 
-#### Users
+---
 
-Stores registered users of the application.
+## Technologies
 
-| Column | Type | Description |
-|------|------|-------------|
-| user_id | INT | Primary key |
-| username | VARCHAR | Username of the user |
-| email | VARCHAR | User email |
-| password | VARCHAR | Hashed password |
-| user_level_id | INT | User role |
+- Node.js
+- Express
+- MySQL / MariaDB
+- JWT authentication
+- bcrypt
 
-#### DiaryEntries
+---
 
-Stores health diary entries created by users.
+## API Endpoints
 
-| Column | Type | Description |
-|------|------|-------------|
-| entry_id | INT | Primary key |
-| user_id | INT | Reference to Users table |
-| entry_date | DATE | Date of the entry |
-| mood | VARCHAR | User mood |
-| weight | DECIMAL | User weight |
-| sleep_hours | INT | Sleep duration |
-| notes | TEXT | Optional notes |
-
-### Relationships
-
-- Each **DiaryEntry** belongs to a **User**
-- Relationship:
-
-
-## Authentication
-
-The API uses JWT for authentication.
+### Authentication
 
 POST /api/auth/login
+GET /api/auth/me
 
-The token must be sent in requests using:
+### Users
 
-Authorization: Bearer <token>
+GET /api/users
+POST /api/users
 
-## Authorization
+### Diary Entries
 
-Users can only modify their own data.
-
-Protected endpoints:
-
-PUT /api/users/:id
+GET /api/entries
+POST /api/entries
 PUT /api/entries/:id
 DELETE /api/entries/:id
 
+### Training
 
-## Input Validation and Error Handling
+GET /api/training
+POST /api/training
+PUT /api/training/:id
+DELETE /api/training/:id
 
-This project implements server-side validation and error handling to ensure data integrity and API reliability.
+---
 
-### Validation
+## Database
 
-Input validation is implemented using the **express-validator** library.
-Validation rules are applied in route handlers before the controller logic.
+The application uses a **MySQL database** called:
 
-Example validation rules:
+HealthDiary
 
-- **username**
-  - required
-  - 3–20 characters
-  - alphanumeric
-- **email**
-  - must be a valid email format
-- **password**
-  - minimum length 8 characters
+### Tables
 
-If validation fails, the request is rejected with a **400 Bad Request** response.
+Users
+DiaryEntries
+Training
 
-Example response:
+### ER Diagram
 
-```json
-{
-  "error": {
-    "message": "Bad Request",
-    "status": 400,
-    "errors": [
-      {
-        "field": "username",
-        "message": "Invalid value"
-      }
-    ]
-  }
-}
+```mermaid
+erDiagram
+
+Users ||--o{ DiaryEntries : creates
+Users ||--o{ Training : logs

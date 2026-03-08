@@ -10,6 +10,7 @@ import {
 } from './items.js';
 
 import entryRouter from './entry-router.js';
+import trainingRouter from './training-router.js';
 import userRouter from './user-router.js';
 import authRouter from './auth-router.js';
 
@@ -39,6 +40,9 @@ app.post('/api/items', postNewItem);
 
 // ENTRIES
 app.use('/api/entries', entryRouter);
+
+// TRAINING
+app.use('/api/training', trainingRouter);
 
 // USERS
 app.use('/api/users', userRouter);
