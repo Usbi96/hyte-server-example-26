@@ -1,3 +1,5 @@
+/// Projektin tekemisessä on käytetty Ai:ta. ///
+
 # Health Diary Backend
 
 This is the backend API for the Health Diary application.
